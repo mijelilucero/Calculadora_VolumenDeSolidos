@@ -9,6 +9,7 @@ public class Cascarones {
 
     public void funcionamiento(){
         Scanner sc = new Scanner(System.in);
+        char eje = '\u0000';
         char variable = '\u0000';
 
         System.out.println("\n\nDefine el eje de rotación, ingresando:\n" +
@@ -17,7 +18,8 @@ public class Cascarones {
         String respuestaEje=sc.nextLine();
 
         if(respuestaEje.equals("1")){ //EJE x
-            variable = 'x';
+            eje = 'x';
+            variable = 'y';
             System.out.println("\nIngresa la función en términos de y (ejemplo: y*y para f(y) = y^2): ");
             String inputFuncion = sc.nextLine();
 
@@ -28,14 +30,15 @@ public class Cascarones {
             double limSuperior= Double.parseDouble(sc.nextLine());
 
             UnivariateFunction funcion = crearFuncion(inputFuncion, variable);
-            double volumen = calcularVolumen(funcion, limInferior, limSuperior);
+            double volumen = calcularVolumen(funcion, limInferior, limSuperior, variable);
             double volumenRedondeado = Math.round(volumen * 1000.0) / 1000.0;
 
             System.out.println("\n\nEl volumen del sólido es: "+volumenRedondeado+" unidades cubicas.");
 
             sc.close();
         }else if(respuestaEje.equals("2")){ //EJE Y
-            variable = 'y';
+            eje = 'y';
+            variable = 'x';
             System.out.println("\nIngresa la función en términos de x (ejemplo: x*x para f(x) = x^2): ");
             String inputFuncion = sc.nextLine();
 
@@ -46,7 +49,7 @@ public class Cascarones {
             double limSuperior= Double.parseDouble(sc.nextLine());
 
             UnivariateFunction funcion = crearFuncion(inputFuncion, variable);
-            double volumen = calcularVolumen(funcion, limInferior, limSuperior);
+            double volumen = calcularVolumen(funcion, limInferior, limSuperior, variable);
             double volumenRedondeado = Math.round(volumen * 1000.0) / 1000.0;
 
             System.out.println("\n\nEl volumen del sólido es: "+volumenRedondeado+" unidades cubicas.");
@@ -58,9 +61,9 @@ public class Cascarones {
     }
 
 
-    private double calcularVolumen(UnivariateFunction function, double a, double b){
+    private double calcularVolumen(UnivariateFunction function, double a, double b, char variable){
         SimpsonIntegrator integrator = new SimpsonIntegrator();
-        return 2 * Math.PI * integrator.integrate(10000, function, a, b);
+        return 2 * Math.PI * integrator.integrate(10000, (v) -> v * function.value(v), a, b);
     }
 
 
@@ -75,19 +78,16 @@ public class Cascarones {
 
 
     private double evalFuncion(String input, double valorVariable, char variable) {
-        String expresion1 = null;
         String expresion2 = null;
 
         if(variable=='x'){
-            expresion1 = "x";
             expresion2 = input.replace("x", String.valueOf(valorVariable));
         }
         else if (variable=='y') {
-            expresion1 = "y";
             expresion2 = input.replace("y", String.valueOf(valorVariable));
         }
 
-        return evalSimpleExpression(expresion1, variable) * evalSimpleExpression(expresion2, variable);
+        return evalSimpleExpression(expresion2, variable);
     }
 
 

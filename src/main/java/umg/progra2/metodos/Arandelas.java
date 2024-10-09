@@ -91,8 +91,8 @@ public class Arandelas {
             expresionG = inputG.replace("x", String.valueOf(valorVariable));
         }
         else if (eje=='y') {
-            expresionF = inputF.replace("x", String.valueOf(valorVariable));
-            expresionG = inputG.replace("x", String.valueOf(valorVariable));
+            expresionF = inputF.replace("y", String.valueOf(valorVariable));
+            expresionG = inputG.replace("y", String.valueOf(valorVariable));
         }
 
         return (evalSimpleExpression(expresionF, eje) * evalSimpleExpression(expresionF, eje)) - (evalSimpleExpression(expresionG, eje) * evalSimpleExpression(expresionG, eje));
